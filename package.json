@@ -1,7 +1,7 @@
 {
-  "private": true,
   "name": "ovh-angular-list-view",
   "version": "0.1.0",
+  "description": "A list-view/table component for the OVH ecosystem",
   "main": "packages/oui-angular/dist/ovh-angular-list-view.min.js",
   "webpack": "src/index.js",
   "scripts": {
@@ -13,7 +13,19 @@
     "lint:fix": "eslint --ext .js src preview test --fix",
     "start": "cross-env NODE_ENV=preview babel-node build/preview-server -c build/webpack.preview.babel.js",
     "unit": "cross-env NODE_ENV=test BABEL_ENV=test node -r babel-register $(npm bin)/karma start test/unit/karma.conf.js --single-run --reporters spec,coverage",
-    "tdd": "cross-env NODE_ENV=test BABEL_ENV=test node -r babel-register $(npm bin)/karma start test/unit/karma.conf.js --watch"
+    "tdd": "cross-env NODE_ENV=test BABEL_ENV=test node -r babel-register $(npm bin)/karma start test/unit/karma.conf.js --watch",
+    "prepublish": "yarn build"
+  },
+  "repository": "ovh-ux/ovh-angular-list-view",
+  "author": "OVH SAS",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/ovh-ux/ovh-angular-list-view/issues"
+  },
+  "homepage": "https://github.com/ovh-ux/ovh-angular-list-view#readme",
+  "dependencies": {
+    "angular-mock": "^1.0.0",
+    "less-plugin-remcalc": "^0.0.1"
   },
   "devDependencies": {
     "angular": "^1.6.5",
@@ -83,10 +95,6 @@
     "node": ">= 6.9.0",
     "npm": ">= 3.10.0",
     "yarn": ">= 0.17.0"
-  },
-  "dependencies": {
-    "angular-mock": "^1.0.0",
-    "less-plugin-remcalc": "^0.0.1"
   },
   "config": {
     "commitizen": {
