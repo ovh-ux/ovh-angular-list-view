@@ -1,0 +1,31 @@
+{
+    "extends": "ovh/configs/es6-browser",
+    "plugins": [
+      "chai-friendly"
+    ],
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2,
+        "no-magic-numbers": "off",
+        "prefer-arrow-callback": "warn",
+        "no-mixed-operators": "off",
+        "prefer-template": "warn",
+        "dot-notation": "warn",
+        "no-param-reassign": "off",
+        "object-shorthand": "warn",
+        "arrow-parens": ["error", "as-needed"],
+        "class-methods-use-this": "off",
+        "lines-around-comment": "off",
+        "strict": "off",
+        "sort-imports": "off"
+    },
+    "env": {
+        "mocha": true
+    },
+    "globals": {
+        "expect": false
+    }
+}

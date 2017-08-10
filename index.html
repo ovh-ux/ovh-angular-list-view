@@ -1,0 +1,15 @@
+<!doctype html>
+<html data-ng-app="preview" data-ng-strict-di data-ng-cloak lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible", content="ie=edge">
+    <title>Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <preview></preview>
+    <% for (chunk in assets.chunks) { %>
+      <script src="./<%= assets.chunks[chunk].entry %>"></script>
+    <% } %>
+  </body>
+</html>

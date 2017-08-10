@@ -1,0 +1,9 @@
+{
+  "name": "ovh-angular-list-view",
+  "main": "packages/oui-angular/dist/ovh-angular-list-view.min.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "node_modules"
+  ]
+}

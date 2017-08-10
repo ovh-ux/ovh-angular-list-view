@@ -1,0 +1,74 @@
+@rem-base: rem-base(16px);
+@oui-icon-dist-folder: '~ovh-ui-kit/dist/icons';
+
+@import '~ovh-ui-kit/packages/oui/stylekit';
+@import './skeleton';
+
+body {
+  overflow-y: scroll;
+}
+
+.inline-component {
+  display: inline;
+}
+
+.oui-table-panel {
+  &__pagination {
+    &_top {
+      .pagination__progress {
+        display: none;
+      }
+    }
+  }
+
+  .oui-button {
+    margin-bottom: 0;
+  }
+
+  .oui-table {
+    table-layout: fixed;
+    margin-bottom: 0;
+
+    &__header_selector {
+      width: 20px;
+    }
+
+    .tablet({
+      table-layout: auto;
+    });
+
+    &__row {
+      .oui-skeleton__loader {
+        width: 40%;
+      }
+
+      &:nth-child(even) {
+        .oui-skeleton__loader {
+          width: 60%;
+        }
+      }
+    }
+  }
+}
+
+.oui-table-empty {
+  font-style: italic;
+  text-align: center;
+}
+
+.pagination {
+  #oui > .base-font();
+
+  text-align: center;
+
+  &__body {
+    display: inline-block;
+    margin: rem-calc(10);
+  }
+
+  &__progress {
+    background-color: @oui-color-pacific;
+    height: 3px;
+    transition: width ease-out .2s;
+  }
+}
