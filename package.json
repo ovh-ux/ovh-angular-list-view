@@ -2,7 +2,7 @@
   "name": "ovh-angular-list-view",
   "version": "0.1.0",
   "description": "A list-view/table component for the OVH ecosystem",
-  "main": "packages/oui-angular/dist/ovh-angular-list-view.min.js",
+  "main": "./dist/ovh-angular-list-view.min.js",
   "webpack": "src/index.js",
   "scripts": {
     "build": "yarn build:clean && yarn build:webpack",
