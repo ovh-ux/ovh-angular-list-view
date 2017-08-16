@@ -15,3 +15,8 @@ export function capitalize (string) {
     }
     return null;
 }
+
+export function range (size) {
+    // Generate a range: [0, 1, 2, ..., size - 1]
+    return Array(...{ length: size }).map(Number.call, Number);
+}

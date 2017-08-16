@@ -129,7 +129,7 @@
 <oui-table ng-if="$ctrl.trigger"
   rows="$ctrl.partialData"
   row-loader="$ctrl.loadRow($row)"
-  page-size="10">
+  page-size="25">
   <column property="firstName" sortable="asc"></column>
   <column property="lastName" sortable></column>
   <column title="'Mère'" property="parents.mother.lastName" sortable>
@@ -141,12 +141,6 @@
   <column title="'Composite column'" property="parents.mother.lastName"
     template="$ctrl.getTemplate()"></column>
   <column property="email" sortable></column>
-  <pagination>
-    <simple-pagination current-page="$table.getCurrentPage()"
-      page-count="$table.getPageCount()"
-      on-next-page="$table.nextPage()"
-      on-previous-page="$table.previousPage()"></simple-pagination>
-  </pagination>
 </oui-table>
 
 <button type="button" ng-click="$ctrl.redraw()">Redraw</button>
@@ -157,7 +151,7 @@
   Delay: <input data-label="Delay" data-unit="ms" type="number" ng-model="$ctrl.delay"> ms
 </div>
 
-## Empty table
+<!-- ## Empty table
 
 <oui-table
   ng-if="$ctrl.trigger"
@@ -186,9 +180,9 @@
   </pagination>
   <empty-placeholder>Aucun résultat</empty-placeholder>
 </oui-table>
-<button type="button" ng-click="$ctrl.addElement()">Add element</button>
+<button type="button" ng-click="$ctrl.addElement()">Add element</button> -->
 
-## Item selection
+<!-- ## Item selection
 
 <oui-table
   ng-if="$ctrl.trigger"
@@ -216,4 +210,4 @@
       on-next-page="$table.nextPage()"
       on-previous-page="$table.previousPage()"></simple-pagination>
   </pagination>
-</oui-table>
+</oui-table> -->

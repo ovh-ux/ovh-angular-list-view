@@ -1,11 +1,12 @@
-import { capitalize, hasProperty } from "./util";
+import { capitalize, hasProperty, range } from "./util";
 
 export default class {
-    constructor ($attrs, $compile, $parse, $q, $sce, $scope, $timeout, orderByFilter, ouiTableConfiguration) {
+    constructor ($attrs, $compile, $element, $parse, $q, $sce, $scope, $timeout, orderByFilter, ouiTableConfiguration) {
         "ngInject";
 
         this.$attrs = $attrs;
         this.$compile = $compile;
+        this.$element = $element;
         this.$parse = $parse;
         this.$q = $q;
         this.$sce = $sce;
@@ -49,7 +50,7 @@ export default class {
     }
 
     init () {
-    // Local data
+        // Local data
         if (this.rows) {
             this.$scope.$watchCollection("tableCtrl.rows", () => {
                 this.sortedRows = this.rows;
@@ -128,10 +129,34 @@ export default class {
         this.changeOffset(+this.getCurrentOffset() + this.getPageSize());
     }
 
+    goToPage (newPage) {
+        this.changeOffset((newPage - 1) * this.getPageSize() + 1);
+    }
+
+    setPageSize (pageSize) {
+        this._pageSize = pageSize;
+        this.updatePageMeta({
+            currentOffset: 0,
+            pageCount: Math.ceil(this.pageMeta.totalCount / this._pageSize),
+            totalCount: this.rows.length
+        });
+
+        this.scrollToTop();
+
+        this.changePage({ skipSort: true })
+            .catch(this.handleError.bind(this));
+    }
+
+    scrollToTop () {
+        this.$element[0].scrollIntoView(true);
+    }
+
     changeOffset (newOffset) {
         const oldOffset = this.getCurrentOffset();
         const oldSelection = angular.copy(this.selection);
         const oldAllSelected = this.allSelected;
+
+        this.scrollToTop();
 
         this.pageMeta.currentOffset = newOffset;
         this.selection = [];
@@ -250,15 +275,14 @@ export default class {
 
     getPageRepeatRange () {
         if (this.getPageCount() === this.getCurrentPage()) {
-            return this.getRepeatRange(this.getTotalCount() - (this.getPageCount() - 1) * this.getPageSize());
+            return range(this.getTotalCount() - (this.getPageCount() - 1) * this.getPageSize());
         }
 
-        return this.getRepeatRange(this.getPageSize());
+        return range(this.getPageSize());
     }
 
     getRepeatRange (size) {
-    // Generate a range: [0, 1, 2, ..., size - 1]
-        return Array(...{ length: size }).map(Number.call, Number);
+        return range(size);
     }
 
     sort (column) {

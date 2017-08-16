@@ -17,7 +17,7 @@ export default class {
         this.timeout(() => {
             this.data = data;
 
-            this.partialData = _.map(data.slice(0, 1000), line => _.pick(line, ["firstName", "lastName"]));
+            this.partialData = _.map(data.slice(0, 287), line => _.pick(line, ["firstName", "lastName"]));
         }, 1000);
 
         this.label = "value";
