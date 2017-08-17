@@ -10,7 +10,7 @@ export default class {
             resultsPerPage: "Results per page",
             page: "page",
             of: "of",
-            result: "results",
+            results: "results",
             next: "next",
             previous: "previous"
         };

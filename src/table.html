@@ -70,12 +70,14 @@
     </tbody>
   </table>
   <oui-table-pagination
+    ng-hide="tableCtrl.loading"
     ng-if="tableCtrl.paginationTemplate"
     template="tableCtrl.paginationTemplate"
     table="tableCtrl"
     ng-class="[ tableCtrl.css.tablePanel + '__pagination', tableCtrl.css.tablePanel + '__pagination_bottom' ]">
   </oui-table-pagination>
   <div
+    ng-hide="tableCtrl.loading"
     ng-if="!tableCtrl.paginationTemplate"
     ng-class="[ tableCtrl.css.tablePanel + '__pagination', tableCtrl.css.tablePanel + '__pagination_bottom' ]">
     <oui-table-default-pagination
