@@ -114,11 +114,11 @@ export default {
             return capitalize(string);
         }
     },
-    template: `<div class="pagination">
-    <div class="pagination__text">
-      <div class="pagination__size-selector tui-dropdown">
+    template: `<div class="tui-pagination">
+    <div class="tui-pagination__text">
+      <div class="tui-pagination__size-selector tui-dropdown">
         <span role="button"
-            class="pagination__size-selector-text"
+            class="tui-pagination__size-selector-text"
             ng-click="$ctrl.pageSizeToggle()"
             ng-keydown="$ctrl.pageSizeKeydown($event)"
             aria-pressed="$ctrl.menuPageSizeVisible"
@@ -145,7 +145,7 @@ export default {
       <span ng-bind="$ctrl.totalItems"></span>
       <span ng-bind="$ctrl.config.words.results"></span>
     </div>
-    <div class="pagination__selector"
+    <div class="tui-pagination__selector"
       ng-if="$ctrl.pageCount > 1">
       <button type="button" class="oui-button oui-button_secondary oui-button_icon-only oui-button_small-width"
         ng-disabled="$ctrl.currentPage <= 1"
