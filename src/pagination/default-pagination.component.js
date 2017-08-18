@@ -183,7 +183,8 @@ export default {
                 <button class="oui-button"
                   ng-class="{ 'oui-button_selected': page === $ctrl.currentPage }"
                   ng-bind="page"
-                  ng-click="$ctrl.setPageNumber(page)"></button>
+                  ng-click="$ctrl.setPageNumber(page)"
+                  aria-label="{{$ctrl.capitalize($ctrl.config.words.page)}} {{page}} {{$ctrl.config.words.of}} {{$ctrl.pageCount}}"></button>
               </li>
             </ul>
           </div>
