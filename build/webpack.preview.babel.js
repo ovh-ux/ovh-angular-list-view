@@ -35,7 +35,7 @@ export default merge(config, {
                     interpolate: true
                 }
             },
-            "markdown-loader"
+                "markdown-loader"
             ]
         }, {
             test: /\.less$/,

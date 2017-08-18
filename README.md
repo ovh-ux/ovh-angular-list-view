@@ -119,7 +119,10 @@ Or you can use the `page-size` property. It takes precedence over value configur
 </oui-table>
 ```
 
-No default pagination element exists at this moment. You will have to implement it.
+The default pagination widget will be used if you don't define yours.
+In this case, you need to import [ovh-ui-kit](https://github.com/ovh-ux/ovh-ui-kit) in your project.
+
+If you want to make your pagination, here is an example `simple-pagination` directive where `$table` is used to get useful properties directly from [table controller](src/table.controller.js#L104).
 
 ```html
 <oui-table rows="$ctrl.data" page-size="10">
@@ -134,7 +137,15 @@ No default pagination element exists at this moment. You will have to implement 
 </oui-table>
 ```
 
-Here is a `simple-pagination` directive. You can use `$table` to get useful properties.
+#### Page size selector
+
+If you use the default pagination (but you can also use this in your custom pagination), you can override the default [page sizes](src/table.provider.js#L6):
+
+```javascript
+app.config(ouiTableConfigurationProvider => {
+    ouiTableConfigurationProvider.setPageSizes([10, 25, 50, 100]);
+});
+```
 
 ### Custom cell templates
 
