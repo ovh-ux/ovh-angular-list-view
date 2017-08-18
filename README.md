@@ -120,7 +120,7 @@ Or you can use the `page-size` property. It takes precedence over value configur
 ```
 
 The default pagination widget will be used if you don't define yours.
-In this case, you need to import [ovh-ui-kit](https://github.com/ovh-ux/ovh-ui-kit) in your project.
+In this case, you need to import [ovh-ui-kit](https://github.com/ovh-ux/ovh-ui-kit) in your project and [ovh-angular-list-view.min.css](dist/ovh-angular-list-view.min.css) extra file from this repos.
 
 If you want to make your pagination, here is an example `simple-pagination` directive where `$table` is used to get useful properties directly from [table controller](src/table.controller.js#L104).
 
