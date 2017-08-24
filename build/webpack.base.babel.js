@@ -12,7 +12,8 @@ export default {
         extensions: [".js", ".json"],
         alias: {
             src: path.resolve(".", "src"),
-            build: path.resolve(__dirname)
+            build: path.resolve(__dirname),
+            docs: path.resolve(".", "docs")
         }
     },
     plugins: [

@@ -173,10 +173,10 @@ export default class {
     }
 
     /**
-   * Show current data frame according currentOffset, pageSize and currentSorting.
-   * Controls the loading state.
-   * Possibility to skip sort on page change with local data.
-   */
+     * Show current data frame according currentOffset, pageSize and currentSorting.
+     * Controls the loading state.
+     * Possibility to skip sort on page change with local data.
+     */
     changePage (config = {}) {
         if (this.loading) {
             return this.$q.reject(false);
@@ -217,8 +217,8 @@ export default class {
     }
 
     /**
-   * Change page with local data
-   */
+     * Change page with local data
+     */
     localLoadData (config = {}) {
         const deferred = this.$q.defer();
 
@@ -240,8 +240,8 @@ export default class {
     }
 
     /**
-   * Change page with remote data
-   */
+     * Change page with remote data
+     */
     loadData () {
         return this.rowsLoader({
             $config: {
@@ -264,10 +264,10 @@ export default class {
     }
 
     /**
-   * Check if all data is loaded on this row
-   * @param  {object}  row a row
-   * @return {Boolean}     true if loaded
-   */
+     * Check if all data is loaded on this row
+     * @param  {object}  row a row
+     * @return {Boolean}     true if loaded
+     */
     isRowLoaded (row) {
         return this.columns.map(column => this.hasProperty(row, column.name))
             .reduce((a, b) => a && b, true);
@@ -286,7 +286,7 @@ export default class {
     }
 
     sort (column) {
-        if (!column.sortable) {
+        if (!column || !column.sortable) {
             return;
         }
 

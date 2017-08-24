@@ -12,8 +12,13 @@ export default config => {
     //    http://karma-runner.github.io/0.13/config/browsers.html
     // 2. add it to the `browsers` array below.
         browsers: ["PhantomJS"],
-        frameworks: ["mocha", "chai"],
-        reporters: ["coverage"],
+        frameworks: ["chai", "mocha", "sinon-chai"],
+        client: {
+            chai: {
+                includeStack: true
+            }
+        },
+        reporters: ["spec", "coverage"],
         files: [
             require.resolve("angular"), // eslint-disable-line no-undef
             require.resolve("angular-mocks"), // eslint-disable-line no-undef

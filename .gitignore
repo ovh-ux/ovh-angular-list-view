@@ -4,4 +4,4 @@ node_modules
 *.log
 node_modules/
 coverage/
-yarn.lock
+stats.json
