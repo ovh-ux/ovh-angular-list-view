@@ -138,7 +138,7 @@ export default class {
         this.updatePageMeta({
             currentOffset: 0,
             pageCount: Math.ceil(this.pageMeta.totalCount / this._pageSize),
-            totalCount: this.rows.length
+            totalCount: this.pageMeta.totalCount
         });
 
         this.scrollToTop();
