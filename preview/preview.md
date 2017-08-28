@@ -211,3 +211,19 @@
       on-previous-page="$table.previousPage()"></simple-pagination>
   </pagination>
 </oui-table> -->
+
+## Clickable row
+
+<oui-table rows="$ctrl.data"
+    on-row-click="$ctrl.runAction($row)"
+    row-label="$row.firstName + ' ' + $row.lastName"
+    page-size="25">
+  <column property="firstName" sortable="asc"></column>
+  <column property="lastName" sortable></column>
+  <column property="email" sortable>
+    <a href="mailto:{{$value}}">{{$value}}</a>
+  </column>
+  <column property="phone"></column>
+  <column property="birth" sortable></column>
+</oui-table>
+

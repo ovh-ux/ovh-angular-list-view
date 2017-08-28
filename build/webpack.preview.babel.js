@@ -17,7 +17,7 @@ Object.keys(config.entry).forEach(name => {
 });
 
 export default merge(config, {
-    devtool: "#inline-source-map",
+    devtool: "#cheap-module-source-map",
     entry: {
         preview: ["./preview/index.js"]
     },

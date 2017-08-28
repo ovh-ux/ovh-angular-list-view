@@ -285,6 +285,23 @@ You can use `row-loader`. It take the current row as argument and must return a 
 
 [Example](preview/index.controller.js#L66).
 
+### Clickable row
+
+You can specify an action on a row click by defining an `on-row-click` handler on `oui-table`.
+Because you are sensible to accessibility, you can also define a `row-label` which will give you an `arial-label` on each clickable row.
+
+```html
+<oui-table rows="$ctrl.data"
+  on-row-click="$ctrl.runAction($row)"
+  row-label="$row.firstName + ' ' + $row.lastName">
+  <column property="firstName"></column>
+  <column property="lastName"></column>
+  <column property="email"></column>
+  <column property="phone"></column>
+  <column property="birth"></column>
+</oui-table>
+```
+
 ## Run in development mode
 
 Clone this repository and:
