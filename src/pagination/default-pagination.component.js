@@ -32,10 +32,6 @@ export default {
             }
         }
 
-        getPercents () {
-            return `${100 * ((this.currentPage - 1) / (this.pageCount - 1))}%`;
-        }
-
         getButtons () {
             const buttons = [];
             for (let i = 0; i < Math.min(5, this.pageCount); i++) {
@@ -68,27 +64,9 @@ export default {
             }
         }
 
-        pageNumberKeydown ($event) {
-            // Space
-            if ($event.keyCode === 32) {
-                $event.preventDefault();
-                this.pageNumberToggle($event);
-            } else
-            // Escape
-            if ($event.keyCode === 27) {
-                $event.preventDefault();
-                this.menuPageNumberVisible = false;
-            }
-        }
-
         pageSizeToggle () {
             this.menuPageSizeVisible = !this.menuPageSizeVisible;
             this.menuPageNumberVisible = false;
-        }
-
-        pageNumberToggle () {
-            this.menuPageNumberVisible = !this.menuPageNumberVisible;
-            this.menuPageSizeVisible = false;
         }
 
         setPageSize (pageSize) {
