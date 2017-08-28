@@ -8,12 +8,18 @@
 
 ## General case
 
-<!-- Remote data + on-the-fly loading -->
-<!-- <oui-table
+<!-- Remote data + on-the-fly loading + filtering -->
+<label class="oui-label" for="searchText1">Find: </label>
+<input id="searchText1" name="searchText1" type="search" class="oui-input oui-input_inline"
+  data-ng-change="$ctrl.onSearchText('list1')"
+  data-ng-model="$ctrl.searchText"
+  data-ng-model-options="{ debounce: 400 }">
+<oui-table
+  id="list1"
   ng-if="$ctrl.trigger"
   rows-loader="$ctrl.loadPartialData($config)"
   row-loader="$ctrl.loadRow($row)"
-  page-size="10">
+  page-size="25">
   <column property="firstName" sortable="asc"></column>
   <column property="lastName" sortable></column>
   <column title="'Mère'" property="parents.mother.lastName" sortable>
@@ -29,13 +35,7 @@
   <column property="birth" sortable>
     {{$value|date:short}}
   </column>
-  <pagination>
-    <simple-pagination current-page="$table.getCurrentPage()"
-      page-count="$table.getPageCount()"
-      on-next-page="$table.nextPage()"
-      on-previous-page="$table.previousPage()"></simple-pagination>
-  </pagination>
-</oui-table> -->
+</oui-table>
 
 <!-- Remote data -->
 <!-- <oui-table rows-loader="$ctrl.loadData($config)" ng-if="$ctrl.trigger" page-size="10">
@@ -62,11 +62,17 @@
   </pagination>
 </oui-table> -->
 
-<!-- Local data + on-the-fly loading -->
-<!-- <oui-table ng-if="$ctrl.trigger"
-  rows="$ctrl.partialData"
+<!-- Local data + on-the-fly loading + filtering -->
+<!-- <label class="oui-label" for="searchText3">Find: </label>
+<input id="searchText3" name="searchText3" type="search" class="oui-input oui-input_inline"
+  data-ng-change="$ctrl.onSearchText('list3')"
+  data-ng-model="$ctrl.searchText"
+  data-ng-model-options="{ debounce: 400 }">
+<oui-table ng-if="$ctrl.trigger"
+  id="list3"
+  rows="$ctrl.data"
   row-loader="$ctrl.loadRow($row)"
-  page-size="10">
+  page-size="25">
   <column property="firstName" sortable="asc"></column>
   <column property="lastName" sortable></column>
   <column title="'Mère'" property="parents.mother.lastName" sortable>
@@ -81,12 +87,6 @@
   <column title="'Action'" class="oui-table__cell_action">
     <button class="oui-button oui-button_secondary" ng-click="$ctrl.runAction($row)">This is an action</button>
   </column>
-  <pagination>
-    <simple-pagination current-page="$table.getCurrentPage()"
-      page-count="$table.getPageCount()"
-      on-next-page="$table.nextPage()"
-      on-previous-page="$table.previousPage()"></simple-pagination>
-  </pagination>
 </oui-table> -->
 
 <!-- Local data -->
@@ -126,7 +126,7 @@
 </oui-table> -->
 
 <!-- Bug template -->
-<oui-table ng-if="$ctrl.trigger"
+<!-- <oui-table ng-if="$ctrl.trigger"
   rows="$ctrl.partialData"
   row-loader="$ctrl.loadRow($row)"
   page-size="25">
@@ -149,7 +149,7 @@
 
 <div class="inline-component">
   Delay: <input data-label="Delay" data-unit="ms" type="number" ng-model="$ctrl.delay"> ms
-</div>
+</div> -->
 
 <!-- ## Empty table
 

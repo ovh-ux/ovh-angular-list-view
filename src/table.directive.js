@@ -9,6 +9,7 @@ export default $compile => {
         controllerAs: "tableCtrl",
         scope: true,
         bindToController: {
+            id: "@?",
             pageSize: "@",
             rows: "<",
             rowsLoader: "&",

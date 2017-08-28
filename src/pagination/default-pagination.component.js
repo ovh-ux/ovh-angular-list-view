@@ -27,6 +27,7 @@ export default {
 
         $onChanges (changes) {
             if (changes.pageCount) {
+                this.buttons = this.getButtons();
                 this.pagesList = this.getPagesList();
             }
         }

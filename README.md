@@ -9,7 +9,7 @@
 ## Installation
 
 ```bash
-yarn add "https://github.com/ovh-ux/ovh-angular-list-view"
+yarn add ovh-angular-list-view
 ```
 
 ### Configuration
@@ -25,7 +25,7 @@ angular.module("yourApp", [
 By default, no styles are embedded. You can choose to use the ovh-ui-kit styles by adding it to your dependencies:
 
 ```bash
-yarn add --dev "https://github.com/ovh-ux/ovh-ui-kit"
+yarn add --dev ovh-ui-kit
 ```
 
 Then, you can configure the default styles:
@@ -205,6 +205,66 @@ Your method must:
 ```
 
 [Example](preview/index.controller.js#L28).
+
+### Filtering
+
+The filtering UI must entirely take place outside of the table. You have to do it on your own.
+
+**The 1st step is to add an id to your table!**
+
+Therefore, there exist some differences between local and remote method.
+
+#### Local filtering
+
+```html
+<label for="searchTextExample">Find: </label>
+<input id="searchTextExample"
+  name="searchTextExample"
+  type="search"
+  data-ng-change="$ctrl.onSearchText()"
+  data-ng-model="$ctrl.searchText"
+  data-ng-model-options="{ debounce: 400 }">
+<oui-table rows="data" id="listView">
+  <column property="firstName"></column>
+  <column property="lastName"></column>
+</oui-table>
+```
+
+The controller just have to broadcast an event `oui-table:[id]:refresh` with an object containing the search text in a `searchText` property.
+
+```javascript
+class YourController {
+    onSearchText () {
+        this.scope.$broadcast("oui-table:searchTextExample:refresh", {
+            searchText: this.searchText
+        });
+    }
+}
+```
+
+The search is made in all properties specified in `column` tags.
+
+#### Remote filtering
+
+```html
+<label for="searchTextExample">Find: </label>
+<input id="searchTextExample"
+  name="searchTextExample"
+  type="search"
+  data-ng-change="$ctrl.onSearchText()"
+  data-ng-model="$ctrl.searchText"
+  data-ng-model-options="{ debounce: 400 }">
+<oui-table row-loader="$ctrl.loadRow($row)" id="listView">
+  <column property="firstName"></column>
+  <column property="lastName"></column>
+</oui-table>
+```
+
+The event emission does not changed compared to local data and your search text is passed to your loading data function as `searchText` attribute so that you can use it for your own loading logic.
+
+[Example](preview/index.controller.js#L28).
+
+In addition, please note that you also have the possibilty to give custom filter parameters which are passed the same way as `searchText` to your loading function.
 
 ### Remote partial data
 

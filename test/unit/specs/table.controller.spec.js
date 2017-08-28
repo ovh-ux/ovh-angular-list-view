@@ -53,33 +53,161 @@ describe("Table controller", () => {
             controller = element.controller("ouiTable");
         }));
 
-        it("should update rows", () => {
-            expect(controller.loading).to.be.true;
-            setRowData(oneLineData);
-            expect(controller.loading).to.be.false;
-            expect(controller.displayedRows).to.deep.equal(oneLineData);
-            expect(controller.rows).to.deep.equal(oneLineData);
+        describe("With no default sort", () => {
+            it("should update rows", () => {
+                expect(controller.loading).to.be.true;
+                setRowData(oneLineData);
+                expect(controller.loading).to.be.false;
+                expect(controller.displayedRows).to.deep.equal(oneLineData);
+                expect(controller.rows).to.deep.equal(oneLineData);
+            });
+
+            it("should not sort data", () => {
+                setRowData(allData);
+                $scope.$digest();
+                expect(controller.displayedRows[0].firstName).to.equal("Raymond");
+                expect(controller.displayedRows[9].firstName).to.equal("Thomas");
+            });
+
+            it("should have getters returning right values", () => {
+                setRowData(oneLineData);
+                expect(controller.getPageCount()).to.equal(1);
+                expect(controller.getTotalCount()).to.equal(2);
+                expect(controller.getCurrentOffset()).to.equal(0);
+                expect(controller.getCurrentPage()).to.equal(1);
+                expect(controller.getPageSize()).to.equal(10);
+            });
         });
 
-        it("should have getters returning right values", () => {
-            setRowData(oneLineData);
-            expect(controller.getPageCount()).to.equal(1);
-            expect(controller.getTotalCount()).to.equal(2);
-            expect(controller.getCurrentOffset()).to.equal(0);
-            expect(controller.getCurrentPage()).to.equal(1);
-            expect(controller.getPageSize()).to.equal(10);
+        describe("With default sort", () => {
+            beforeEach(angular.mock.inject(($rootScope, $compile) => {
+                $scope = $rootScope.$new();
+                element = angular.element(`
+                    <oui-table
+                        rows="rowData">
+                        <column property="firstName" sortable="asc"></column>
+                        <column property="lastName" sortable></column>
+                        <column property="email" sortable></column>
+                        <column property="phone"></column>
+                    </oui-table>
+                `);
+                $compile(element)($scope);
+                $scope.$digest();
+                controller = element.controller("ouiTable");
+            }));
+
+            it("should have sorted data", () => {
+                setRowData(allData);
+                $scope.$digest();
+                expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+                expect(controller.displayedRows[9].firstName).to.equal("Alan");
+            });
         });
 
-        it("should sort data when action is triggered", done => {
-            setRowData(oneLineData);
-            expect(controller.displayedRows[0].foo).to.equal("foo");
-            expect(controller.displayedRows[1].foo).to.equal("baz");
+        describe("Sorting actions", () => {
+            beforeEach(angular.mock.inject(($rootScope, $compile) => {
+                $scope = $rootScope.$new();
+                element = angular.element(`
+                    <oui-table
+                        rows="rowData">
+                        <column property="firstName" sortable="asc"></column>
+                    </oui-table>
+                `);
+                $compile(element)($scope);
+                $scope.$digest();
+                controller = element.controller("ouiTable");
+            }));
 
-            controller.sort(controller.columns[0]);
-            whenDataLoaderFlush(() => {
-                expect(controller.displayedRows[0].foo).to.equal("baz");
-                expect(controller.displayedRows[1].foo).to.equal("foo");
-                done();
+            it("should sort data when action is triggered", done => {
+                setRowData(oneLineData);
+                expect(controller.displayedRows[0].foo).to.equal("foo");
+                expect(controller.displayedRows[1].foo).to.equal("baz");
+
+                controller.sort(controller.columns[0]);
+                whenDataLoaderFlush(() => {
+                    expect(controller.displayedRows[0].foo).to.equal("baz");
+                    expect(controller.displayedRows[1].foo).to.equal("foo");
+                    done();
+                });
+            });
+        });
+
+        describe("Filtering", () => {
+            describe("Search Text", () => {
+                beforeEach(angular.mock.inject(($rootScope, $compile, $timeout) => {
+                    $scope = $rootScope.$new();
+                    timeout = $timeout;
+                    element = angular.element(`
+                        <oui-table
+                            id="testListSearchText"
+                            rows="rowData"
+                            page-size="25">
+                            <column property="firstName" sortable="asc"></column>
+                            <column property="lastName" sortable></column>
+                            <column property="email" sortable></column>
+                            <column property="phone"></column>
+                            <column property="birth" sortable></column>
+                        </oui-table>
+                    `);
+                    $compile(element)($scope);
+                    $scope.$digest();
+                    controller = element.controller("ouiTable");
+                }));
+
+                it("should filter data when event is broadcasted", () => {
+                    setRowData(allData);
+                    expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                    $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                        searchText: "Thomas"
+                    });
+                    timeout.flush();
+
+                    expect(controller.displayedRows[0].firstName).to.equal("Billy");
+                    expect(controller.displayedRows[0].lastName).to.equal("Thomas");
+                    expect(controller.displayedRows.length).to.equal(5);
+                });
+
+                it("should not be affected by page change", () => {
+                    setRowData(allData);
+                    expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                    $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                        searchText: "1977"
+                    });
+                    timeout.flush();
+
+                    expect(controller.displayedRows[0].firstName).to.equal("Amy");
+                    expect(controller.displayedRows[0].lastName).to.equal("Wallace");
+                    expect(controller.filteredRows.length).to.equal(28);
+
+                    controller.goToPage(2);
+                    timeout.flush();
+
+                    expect(controller.displayedRows[0].firstName).to.equal("Teresa");
+                    expect(controller.displayedRows[0].lastName).to.equal("Franklin");
+                });
+
+                it("should not be affected by sort change", () => {
+                    setRowData(allData);
+                    expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                    $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                        searchText: "1977"
+                    });
+                    timeout.flush();
+
+                    expect(controller.displayedRows[0].firstName).to.equal("Amy");
+                    expect(controller.displayedRows[0].lastName).to.equal("Wallace");
+                    expect(controller.filteredRows.length).to.equal(28);
+
+                    // Descending
+                    controller.sort(controller.columns[0]);
+                    timeout.flush();
+
+                    expect(controller.displayedRows[0].firstName).to.equal("Willie");
+                    expect(controller.displayedRows[0].lastName).to.equal("Richardson");
+                });
             });
         });
     });
@@ -194,6 +322,100 @@ describe("Table controller", () => {
                             expect(controller.displayedRows[0].firstName).to.equal("Willie");
                             expect(controller.displayedRows[9].firstName).to.equal("Wayne");
                             done();
+                        });
+                    });
+                });
+            });
+        });
+
+        describe("Filtering", () => {
+            describe("Search Text", () => {
+                beforeEach(angular.mock.inject(($rootScope, $compile, $timeout) => {
+                    $scope = $rootScope.$new();
+                    timeout = $timeout;
+                    element = angular.element(`
+                        <oui-table
+                            id="testListSearchText"
+                            rows-loader="loadData($config)"
+                            page-size="25">
+                            <column property="firstName" sortable="asc"></column>
+                            <column property="lastName" sortable></column>
+                            <column property="email" sortable></column>
+                            <column property="phone"></column>
+                            <column property="birth" sortable></column>
+                        </oui-table>
+                    `);
+                    $scope.loadData = getDataLoader();
+                    $compile(element)($scope);
+                    $scope.$digest();
+                    controller = element.controller("ouiTable");
+                }));
+
+                it("should filter data when event is broadcasted", done => {
+                    whenDataLoaderFlush(() => {
+                        expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                        $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                            searchText: "Thomas"
+                        });
+
+                        whenDataLoaderFlush(() => {
+                            expect(controller.displayedRows[0].firstName).to.equal("Billy");
+                            expect(controller.displayedRows[0].lastName).to.equal("Thomas");
+                            expect(controller.displayedRows.length).to.equal(5);
+
+                            done();
+                        });
+                    });
+                });
+
+                it("should not be affected by page change", done => {
+                    whenDataLoaderFlush(() => {
+                        expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                        $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                            searchText: "1977"
+                        });
+
+                        whenDataLoaderFlush(() => {
+                            expect(controller.displayedRows[0].firstName).to.equal("Amy");
+                            expect(controller.displayedRows[0].lastName).to.equal("Wallace");
+                            expect(controller.getTotalCount()).to.equal(28);
+
+                            controller.goToPage(2);
+
+                            whenDataLoaderFlush(() => {
+                                expect(controller.displayedRows[0].firstName).to.equal("Teresa");
+                                expect(controller.displayedRows[0].lastName).to.equal("Franklin");
+
+                                done();
+                            });
+                        });
+                    });
+                });
+
+                it("should not be affected by sort change", done => {
+                    whenDataLoaderFlush(() => {
+                        expect(controller.displayedRows[0].firstName).to.equal("Aaron");
+
+                        $scope.$broadcast("oui-table:testListSearchText:refresh", {
+                            searchText: "1977"
+                        });
+
+                        whenDataLoaderFlush(() => {
+                            expect(controller.displayedRows[0].firstName).to.equal("Amy");
+                            expect(controller.displayedRows[0].lastName).to.equal("Wallace");
+                            expect(controller.getTotalCount()).to.equal(28);
+
+                            // Descending
+                            controller.sort(controller.columns[0]);
+
+                            whenDataLoaderFlush(() => {
+                                expect(controller.displayedRows[0].firstName).to.equal("Willie");
+                                expect(controller.displayedRows[0].lastName).to.equal("Richardson");
+
+                                done();
+                            });
                         });
                     });
                 });
@@ -359,8 +581,20 @@ describe("Table controller", () => {
     }
 
     function getDataLoader () {
-        return function ({ offset, pageSize, sort }) {
-            const sortedData = _.sortBy(allData, row => _.get(row, sort.property));
+        return function ({ offset, pageSize, sort, searchText }) {
+            let filteredData;
+            if (searchText) {
+                const regExp = new RegExp(searchText, "i");
+                filteredData = allData.filter(row => regExp.test(row.firstName) ||
+                    regExp.test(row.lastName) ||
+                    regExp.test(row.email) ||
+                    regExp.test(row.phone) ||
+                    regExp.test(row.birth));
+            } else {
+                filteredData = allData;
+            }
+
+            const sortedData = _.sortBy(filteredData, row => _.get(row, sort.property));
             if (sort.dir === -1) {
                 sortedData.reverse();
             }
@@ -373,8 +607,8 @@ describe("Table controller", () => {
                         data: page,
                         meta: {
                             currentOffset: offset,
-                            pageCount: Math.ceil(allData.length / pageSize),
-                            totalCount: allData.length
+                            pageCount: Math.ceil(filteredData.length / pageSize),
+                            totalCount: filteredData.length
                         }
                     });
                 }, this.delay);

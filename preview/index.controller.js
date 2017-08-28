@@ -25,8 +25,20 @@ export default class {
         this.emptyList = [];
     }
 
-    loadData ({ offset, pageSize, sort }) {
-        const sortedData = sort.property ? this.orderBy(data, sort.property, sort.dir === -1) : data;
+    loadData ({ offset, pageSize, sort, searchText }) {
+        let filteredData;
+        if (searchText) {
+            const regExp = new RegExp(searchText, "i");
+            filteredData = data.filter(row => regExp.test(row.firstName) ||
+                regExp.test(row.lastName) ||
+                regExp.test(row.email) ||
+                regExp.test(row.phone) ||
+                regExp.test(row.birth));
+        } else {
+            filteredData = data;
+        }
+
+        const sortedData = sort.property ? this.orderBy(filteredData, sort.property, sort.dir === -1) : data;
         const page = sortedData.slice(offset, offset + pageSize);
 
         // AngularJS independent logic
@@ -36,16 +48,28 @@ export default class {
                     data: page,
                     meta: {
                         currentOffset: offset,
-                        pageCount: Math.ceil(data.length / pageSize),
-                        totalCount: data.length
+                        pageCount: Math.ceil(filteredData.length / pageSize),
+                        totalCount: filteredData.length
                     }
                 });
             }, this.delay);
         });
     }
 
-    loadPartialData ({ offset, pageSize, sort }) {
-        const sortedData = sort.property ? this.orderBy(data, sort.property, sort.dir === -1) : data;
+    loadPartialData ({ offset, pageSize, sort, searchText }) {
+        let filteredData;
+        if (searchText) {
+            const regExp = new RegExp(searchText, "i");
+            filteredData = data.filter(row => regExp.test(row.firstName) ||
+                regExp.test(row.lastName) ||
+                regExp.test(row.email) ||
+                regExp.test(row.phone) ||
+                regExp.test(row.birth));
+        } else {
+            filteredData = data;
+        }
+
+        const sortedData = sort.property ? this.orderBy(filteredData, sort.property, sort.dir === -1) : data;
         const page = sortedData.slice(offset, offset + pageSize);
 
         // AngularJS independent logic
@@ -55,8 +79,8 @@ export default class {
                     data: _.map(page, line => _.pick(line, ["firstName", "lastName"])),
                     meta: {
                         currentOffset: offset,
-                        pageCount: Math.ceil(data.length / pageSize),
-                        totalCount: data.length
+                        pageCount: Math.ceil(filteredData.length / pageSize),
+                        totalCount: filteredData.length
                     }
                 });
             }, this.delay);
@@ -73,6 +97,12 @@ export default class {
 
     onSelectionChange (selection) {
         console.log(selection); // eslint-disable-line
+    }
+
+    onSearchText (id) {
+        this.scope.$broadcast(`oui-table:${id}:refresh`, {
+            searchText: this.searchText
+        });
     }
 
     getTemplate () {

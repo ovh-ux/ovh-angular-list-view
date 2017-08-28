@@ -32,7 +32,10 @@ export default class {
             columnName: undefined,
             dir: 0
         };
+        this.filterConfig = {};
+
         this.displayedRows = [];
+        this.filteredRows = this.rows;
         this.sortedRows = this.rows;
 
         // Opened rows (for phone screens)
@@ -47,12 +50,15 @@ export default class {
 
         this.allSelected = false;
         this.selection = [];
+
+        this.subscribeToEvents();
     }
 
     init () {
         // Local data
         if (this.rows) {
             this.$scope.$watchCollection("tableCtrl.rows", () => {
+                this.filteredRows = this.rows;
                 this.sortedRows = this.rows;
 
                 this.updatePageMeta({
@@ -64,14 +70,23 @@ export default class {
                 this.changePage()
                     .catch(this.handleError.bind(this));
             });
-        }
-
-        if (!this.rows && !this.rowsLoader) {
+        } else
+        // Remote data
+        if (this.rowsLoader) {
+            this.changePage({ skipSort: true })
+                .catch(this.handleError.bind(this));
+        } else {
             throw new Error("No data nor data loader found");
         }
+    }
 
-        this.changePage({ skipSort: true })
-            .catch(this.handleError.bind(this));
+    subscribeToEvents () {
+        // Id attribute is mandatory to avoid refreshing multiple list-views.
+        if (this.id) {
+            this.$scope.$on(`oui-table:${this.id}:refresh`, (event, $filterConfig) => {
+                this.refreshFilter($filterConfig);
+            });
+        }
     }
 
     isSelectable () {
@@ -161,6 +176,7 @@ export default class {
         this.pageMeta.currentOffset = newOffset;
         this.selection = [];
         this.allSelected = false;
+
         this.changePage({ skipSort: true })
             .then(() => {
                 this.selectionChange();
@@ -170,6 +186,12 @@ export default class {
                 this.selection = oldSelection;
                 this.allSelected = oldAllSelected;
             });
+    }
+
+    refreshFilter (filterConfig = {}) {
+        this.pageMeta.currentOffset = 0;
+        this.filterConfig = filterConfig;
+        this.changePage();
     }
 
     /**
@@ -185,9 +207,9 @@ export default class {
         let loadPage;
 
         if (this.rows) {
-            loadPage = this.localLoadData.bind(this, config);
+            loadPage = this.localLoadData.bind(this, config, this.filterConfig);
         } else {
-            loadPage = this.loadData.bind(this);
+            loadPage = this.loadData.bind(this, this.filterConfig);
         }
 
         this.loading = true;
@@ -209,7 +231,7 @@ export default class {
     updatePageMeta ({ currentOffset, pageCount, totalCount }) {
         this.pageMeta = {
             currentOffset,
-            currentPage: Math.floor(currentOffset / this._pageSize) + 1,
+            currentPage: Math.ceil(currentOffset / this._pageSize),
             pageCount,
             totalCount,
             pageSize: this._pageSize
@@ -219,20 +241,41 @@ export default class {
     /**
      * Change page with local data
      */
-    localLoadData (config = {}) {
+    localLoadData (config = {}, filterConfig = {}) {
         const deferred = this.$q.defer();
 
         this.$timeout(() => {
+            // Filter data
+            this.filteredRows = this.rows;
+            if (filterConfig.searchText) {
+                const regExp = new RegExp(filterConfig.searchText, "i");
+
+                this.filteredRows = this.rows.filter(row => {
+                    const columnsPropertiesGetters = this.columns
+                        .filter(column => !!column.getValue) // column must have a name
+                        .map(column => column.getValue);
+                    for (let i = 0; i < columnsPropertiesGetters.length; i++) {
+                        if (regExp.test(columnsPropertiesGetters[i](row))) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+
             // Sorting, only executed if sortConfiguration has changed
             if (!config.skipSort) {
                 const sortConfiguration = this.getSortingConfiguration();
-                this.sortedRows = this.orderBy(this.rows, sortConfiguration.property, sortConfiguration.dir < 0);
+                this.sortedRows = this.orderBy(this.filteredRows, sortConfiguration.property, sortConfiguration.dir < 0);
             }
 
             // Pagination
             deferred.resolve({
                 data: this.sortedRows.slice(this.getCurrentOffset(), this.getCurrentOffset() + this.getPageSize()),
-                meta: this.pageMeta
+                meta: Object.assign(this.pageMeta, {
+                    pageCount: Math.ceil(this.sortedRows.length / this.pageMeta.pageSize),
+                    totalCount: this.sortedRows.length
+                })
             });
         });
 
@@ -242,13 +285,13 @@ export default class {
     /**
      * Change page with remote data
      */
-    loadData () {
+    loadData (config = {}) {
         return this.rowsLoader({
-            $config: {
+            $config: Object.assign({
                 offset: this.getCurrentOffset(),
                 pageSize: this.getPageSize(),
                 sort: this.getSortingConfiguration()
-            }
+            }, config)
         });
     }
 
@@ -259,7 +302,8 @@ export default class {
     loadRowData (row) {
         if (!this.isRowLoaded(row)) {
             this.$q.when(this.rowLoader({ $row: row }))
-                .then(fullRow => Object.assign(row, fullRow));
+                .then(fullRow => Object.assign(row, fullRow))
+                .catch(this.handleError.bind(this));
         }
     }
 
