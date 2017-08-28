@@ -51,6 +51,8 @@ export default class {
         this.allSelected = false;
         this.selection = [];
 
+        this.canClickOnRow = this.$attrs.onRowClick;
+
         this.subscribeToEvents();
     }
 
@@ -408,6 +410,13 @@ export default class {
             if (this.canClickOnRow) {
                 this.onRowClick({ $row });
             }
+        }
+    }
+
+    rowKeyDown ($row, $event) {
+        // Space
+        if ($event.keyCode === 32 && this.canClickOnRow) {
+            this.onRowClick({ $row });
         }
     }
 

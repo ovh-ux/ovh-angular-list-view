@@ -30,6 +30,7 @@
         ng-init="rowIndex = $index"
         ng-repeat="row in tableCtrl.displayedRows track by $index"
         ng-click="tableCtrl.rowClick(row, $event)"
+        ng-keydown="tableCtrl.rowKeyDown(row, $event)"
         row-clickable="tableCtrl.canClickOnRow"
         row-label="tableCtrl.getRowLabel(row)">
         <td ng-if="tableCtrl.isSelectable()"
