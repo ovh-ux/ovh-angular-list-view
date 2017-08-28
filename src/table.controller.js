@@ -402,6 +402,22 @@ export default class {
         this.isRowOpen[index] = !this.isRowOpen[index];
     }
 
+    rowClick ($row, $event) {
+        if ($event.path[0].tagName === "TD") {
+            $event.preventDefault();
+            if (this.canClickOnRow) {
+                this.onRowClick({ $row });
+            }
+        }
+    }
+
+    getRowLabel ($row) {
+        if (this.$attrs.onRowClick) {
+            return this.$parse(this.rowLabel)({ $row });
+        }
+        return "";
+    }
+
     getColumn (name) {
         for (let i = 0; i < this.columns.length; i++) {
             if (this.columns[i].name === name) {

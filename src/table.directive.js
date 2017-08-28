@@ -14,7 +14,9 @@ export default $compile => {
             rows: "<",
             rowsLoader: "&",
             rowLoader: "&",
-            onSelectionChange: "&"
+            onSelectionChange: "&",
+            onRowClick: "&",
+            rowLabel: "@"
         },
         compile: () => ({
             post: (scope, elem, attrs, tableCtrl) => {

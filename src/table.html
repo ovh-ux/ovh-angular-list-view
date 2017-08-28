@@ -24,9 +24,14 @@
     </thead>
     <tbody ng-class="tableCtrl.css.tbody"
       ng-hide="tableCtrl.loading">
-      <tr ng-class="[ tableCtrl.css.tr, tableCtrl.getClosedClass($index) ]"
+      <tr ng-class="[ tableCtrl.css.tr, tableCtrl.getClosedClass($index), {
+        'tableCtrl.css.trClickable': tableCtrl.canClickOnRow
+      } ]"
         ng-init="rowIndex = $index"
-        ng-repeat="row in tableCtrl.displayedRows track by $index">
+        ng-repeat="row in tableCtrl.displayedRows track by $index"
+        ng-click="tableCtrl.rowClick(row, $event)"
+        row-clickable="tableCtrl.canClickOnRow"
+        row-label="tableCtrl.getRowLabel(row)">
         <td ng-if="tableCtrl.isSelectable()"
           ng-class="[ tableCtrl.css.td, tableCtrl.css.tdSelector ]">
           <input ng-if="!tableCtrl.config.selectorTemplate"
