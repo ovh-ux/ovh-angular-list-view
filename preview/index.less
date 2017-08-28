@@ -1,11 +1,23 @@
-@rem-base: rem-base(16px);
+@rem-base: rem-base(10px);
 @oui-icon-dist-folder: '~ovh-ui-kit/dist/icons';
 
 @import '~ovh-ui-kit/packages/oui/stylekit';
 @import './skeleton';
 
+html {
+  font-size: 10px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 body {
   overflow-y: scroll;
+  font-size: rem-calc(16);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .inline-component {
