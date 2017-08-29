@@ -199,7 +199,8 @@ Your method must:
     meta: {
         currentOffset, // page offset (from 0)
         pageCount, // number of pages
-        totalCount // number of items
+        totalCount, // number of items
+        pageSize // page size (optional)
     }
 }
 ```
@@ -283,7 +284,7 @@ You can use `row-loader`. It take the current row as argument and must return a 
 </oui-table>
 ```
 
-[Example](preview/index.controller.js#L66).
+[Example](preview/index.controller.js#L90).
 
 ### Clickable row
 
