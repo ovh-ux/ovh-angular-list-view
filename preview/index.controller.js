@@ -80,7 +80,8 @@ export default class {
                     meta: {
                         currentOffset: offset,
                         pageCount: Math.ceil(filteredData.length / pageSize),
-                        totalCount: filteredData.length
+                        totalCount: filteredData.length,
+                        pageSize
                     }
                 });
             }, this.delay);

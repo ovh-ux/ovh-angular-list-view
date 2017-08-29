@@ -9,7 +9,7 @@
 ## General case
 
 <!-- Remote data + on-the-fly loading + filtering -->
-<!--<label class="oui-label" for="searchText1">Find: </label>
+<label class="oui-label" for="searchText1">Find: </label>
 <input id="searchText1" name="searchText1" type="search" class="oui-input oui-input_inline"
   data-ng-change="$ctrl.onSearchText('list1')"
   data-ng-model="$ctrl.searchText"
@@ -35,7 +35,7 @@
   <column property="birth" sortable>
     {{$value|date:short}}
   </column>
-</oui-table> -->
+</oui-table>
 
 <!-- Remote data -->
 <!-- <oui-table rows-loader="$ctrl.loadData($config)" ng-if="$ctrl.trigger" page-size="10">
@@ -212,7 +212,7 @@
   </pagination>
 </oui-table> -->
 
-## Clickable row
+<!-- ## Clickable row
 
 <oui-table rows="$ctrl.data"
     on-row-click="$ctrl.onClickRow($row, $event)"
@@ -225,5 +225,5 @@
   </column>
   <column property="phone"></column>
   <column property="birth" sortable></column>
-</oui-table>
+</oui-table> -->
 

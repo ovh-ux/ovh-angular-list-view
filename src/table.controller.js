@@ -230,13 +230,14 @@ export default class {
             .catch(this.handleError.bind(this));
     }
 
-    updatePageMeta ({ currentOffset, pageCount, totalCount }) {
+    updatePageMeta ({ currentOffset, pageCount, totalCount, pageSize }) {
+        const newPageSize = pageSize || this._pageSize;
         this.pageMeta = {
             currentOffset,
-            currentPage: Math.ceil(currentOffset / this._pageSize),
+            currentPage: Math.ceil(currentOffset / newPageSize),
             pageCount,
             totalCount,
-            pageSize: this._pageSize
+            pageSize: newPageSize
         };
     }
 
