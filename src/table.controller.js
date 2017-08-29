@@ -405,18 +405,15 @@ export default class {
     }
 
     rowClick ($row, $event) {
-        if ($event.path[0].tagName === "TD") {
-            $event.preventDefault();
-            if (this.canClickOnRow) {
-                this.onRowClick({ $row });
-            }
+        if (this.canClickOnRow) {
+            this.onRowClick({ $row, $event });
         }
     }
 
     rowKeyDown ($row, $event) {
         // Space
         if ($event.keyCode === 32 && this.canClickOnRow) {
-            this.onRowClick({ $row });
+            this.onRowClick({ $row, $event });
         }
     }
 
