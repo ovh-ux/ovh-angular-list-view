@@ -215,7 +215,7 @@
 ## Clickable row
 
 <oui-table rows="$ctrl.data"
-    on-row-click="$ctrl.runAction($row)"
+    on-row-click="$ctrl.onClickRow($row, $event)"
     row-label="$row.firstName + ' ' + $row.lastName"
     page-size="25">
   <column property="firstName" sortable="asc"></column>

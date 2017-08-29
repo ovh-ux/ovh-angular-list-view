@@ -117,6 +117,13 @@ export default class {
         window.alert(`You clicked on ${row.firstName}`); // eslint-disable-line
     }
 
+    onClickRow ($row, $event) {
+        if (($event.type === "click" && $event.target.tagName === "TD") || $event.type === "keydown") {
+            $event.preventDefault();
+            window.alert(`You clicked on/pressed ${$row.firstName}`); // eslint-disable-line
+        }
+    }
+
     addElement () {
         this.emptyList.push(data[this.emptyList.length]);
     }
