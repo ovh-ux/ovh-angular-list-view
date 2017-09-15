@@ -236,7 +236,7 @@ The controller just have to broadcast an event `oui-table:[id]:refresh` with an 
 ```javascript
 class YourController {
     onSearchText () {
-        this.scope.$broadcast("oui-table:searchTextExample:refresh", {
+        this.scope.$broadcast("oui-table:listView:refresh", {
             searchText: this.searchText
         });
     }
