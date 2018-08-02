@@ -1,10 +1,19 @@
 # OVH Angular List-view
 
-![githubbanner](https://user-images.githubusercontent.com/3379410/27423240-3f944bc4-5731-11e7-87bb-3ff603aff8a7.png)
+![OVH component deprecated](https://user-images.githubusercontent.com/3379410/27423263-520b94d8-5731-11e7-996a-f8579e70c33b.png)
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]() [![Chat on gitter](https://img.shields.io/gitter/room/ovh/ux.svg)](https://gitter.im/ovh/ux)
+
+![deprecated](https://img.shields.io/badge/status-deprecated-red.svg)
 
 > Angular directive to generate a table.
+
+---
+
+<div align="center">
+:bookmark: `ovh-angular-list-view` is now deprecated. Please take a look at our <a href="https://github.com/ovh-ux/ovh-ui-kit">OVH UI Kit - Master UI Framework</a>.
+</div>
+
+---
 
 ## Installation
 
